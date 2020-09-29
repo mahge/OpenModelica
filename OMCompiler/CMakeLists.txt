@@ -24,6 +24,15 @@ omc_add_to_report(CMAKE_BUILD_TYPE)
 # Maybe there is a better way to do this but it should suffice for now.
 SET(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
 
+set(CMAKE_INSTALL_MESSAGE LAZY)
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+# find_package(pthreads REQUIRED)
+
+# if(NOT CMAKE_USE_PTHREADS_INIT)
+# message(FATAL_ERROR "Needs pthread API")
+# endif()
+
 
 # options
 option(OMC_USE_CORBA "Should use corba." OFF)

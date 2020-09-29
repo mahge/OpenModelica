@@ -280,11 +280,17 @@ static void getIdent(const char *str, char *this, const char **next)
 
 extern modelica_string OpenModelica_uriToFilename_impl(threadData_t *threadData, modelica_string uri_om, const char *resourcesDir)
 {
+#if defined(_MSC_VER)
+#define omcstrncasecmp _strnicmp
+#else
+#define omcstrncasecmp strncasecmp
+#endif
+
   FILE_INFO info = omc_dummyFileInfo;
   char buf[PATH_MAX];
   const char *uri = MMC_STRINGDATA(uri_om);
   modelica_string dir;
-  if (0==strncasecmp(uri, "modelica://", 11)) {
+  if (0==omcstrncasecmp(uri, "modelica://", 11)) {
     struct stat stat_buf;
     uri += 11;
     getIdent(uri, buf, &uri);
@@ -352,7 +358,7 @@ extern modelica_string OpenModelica_uriToFilename_impl(threadData_t *threadData,
     dir = mmc_mk_scon(buf);
     return uriToFilenameRegularPaths(dir, MMC_STRINGDATA(dir), buf, MMC_STRINGDATA(uri_om), NULL);
   }
-  if (0==strncasecmp(uri, "file://", 7)) {
+  if (0==omcstrncasecmp(uri, "file://", 7)) {
     return uriToFilenameRegularPaths(NULL, uri+7, buf, MMC_STRINGDATA(uri_om), resourcesDir);
   }
   if (strstr(uri, "://")) {
@@ -360,6 +366,8 @@ extern modelica_string OpenModelica_uriToFilename_impl(threadData_t *threadData,
     MMC_THROW();
   }
   return uriToFilenameRegularPaths(uri_om, uri, buf, MMC_STRINGDATA(uri_om), resourcesDir);
+
+#undef omcstrncasecmp
 }
 
 /* TODO: Remove this function after @sjoelund is done prototyping */

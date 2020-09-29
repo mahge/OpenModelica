@@ -3,6 +3,7 @@ find_package(CURL REQUIRED)
 find_package(Intl REQUIRED)
 find_package(Iconv REQUIRED)
 find_package(LAPACK REQUIRED)
+find_package(metis REQUIRED)
 # find_package(ZLIB REQUIRED) # Not needed. We use the minizip lib from 3rdParty/FMIL instead
 
 
@@ -63,14 +64,18 @@ add_library(omcruntime STATIC ${OMC_RUNTIIME_SOURCES})
 add_library(omc::compiler::runtime ALIAS omcruntime)
 target_compile_features(omcruntime PRIVATE cxx_std_11)
 
-target_link_libraries(omcruntime PUBLIC curl)
+target_link_libraries(omcruntime PUBLIC CURL::libcurl)
 target_link_libraries(omcruntime PUBLIC ${Intl_LIBRARIES})
 target_link_libraries(omcruntime PUBLIC Iconv::Iconv)
 target_link_libraries(omcruntime PUBLIC ${LAPACK_LIBRARIES})
 target_link_libraries(omcruntime PUBLIC OpenModelicaRuntimeC)
-target_link_libraries(omcruntime PUBLIC omc::3rd::lpsolve55)
+# target_link_libraries(omcruntime PUBLIC omc::3rd::lpsolve55)
 target_link_libraries(omcruntime PUBLIC omc::3rd::libzmq)
 target_link_libraries(omcruntime PUBLIC omc::3rd::FMIL::minizip) # We use the minizip lib from 3rdParty/FMIL
+
+# if(WIN32)
+#   target_link_libraries(omcruntime PUBLIC PThreads4W::PThreads4W)
+# endif()
 
 # uuid is one of the default libs that cmake adds to any target on Win32.
 # On non-Win systems we look for the library and explicitly use it.
@@ -86,9 +91,12 @@ if(OMC_USE_CORBA AND MINGW)
 endif(OMC_USE_CORBA AND MINGW)
 
 
-target_include_directories(omcruntime INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(omcruntime PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(omcruntime PRIVATE ${OMCompiler_SOURCE_DIR}) #for revision.h
 
+if(MSVC)
+  target_compile_definitions(omcruntime PRIVATE NO_LPLIB)
+endif(MSVC)
 
 
 
@@ -103,7 +111,7 @@ add_library(omc::compiler::backendruntime ALIAS omcbackendruntime)
 target_link_libraries(omcbackendruntime PUBLIC ${Intl_LIBRARIES})
 target_link_libraries(omcbackendruntime PUBLIC OpenModelicaRuntimeC)
 target_link_libraries(omcbackendruntime PUBLIC omc::3rd::fmilib::static)
-target_link_libraries(omcbackendruntime PUBLIC omc::3rd::metis)
+# target_link_libraries(omcbackendruntime PUBLIC omc::3rd::metis)
 
 target_include_directories(omcbackendruntime INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(omcbackendruntime PRIVATE ${OMCompiler_SOURCE_DIR}) #for revision.h

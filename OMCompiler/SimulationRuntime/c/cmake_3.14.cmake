@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 project(SimulationRuntimeC)
+find_package(PThreads REQUIRED)
 
 
 file(GLOB OMC_SIMRT_UTIL_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/util/*.c)
@@ -26,9 +27,13 @@ add_library(OpenModelicaRuntimeC ${libOpenModelicaRuntimeC_BUILD_TYPE}
 
 if(WIN32)
   target_link_libraries(OpenModelicaRuntimeC PUBLIC dbghelp)
-  target_link_libraries(OpenModelicaRuntimeC PUBLIC regex)
-endif(WIN32)
+endif()
 
+if(MSVC)
+  target_link_libraries(OpenModelicaRuntimeC PUBLIC omc::3rd::regex)
+endif()
+
+target_link_libraries(OpenModelicaRuntimeC PUBLIC PThreads4W::PThreads4W)
 target_link_libraries(OpenModelicaRuntimeC PUBLIC omc::3rd::omcgc)
 
 target_include_directories(OpenModelicaRuntimeC INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

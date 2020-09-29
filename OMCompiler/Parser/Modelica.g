@@ -45,9 +45,9 @@ scope omc{
 
 @includes {
 
-  #if defined(_WIN32)
-  #include <winsock2.h>
-  #endif
+  // #if defined(_WIN32)
+  // #include <winsock2.h>
+  // #endif
 
   #define false 0
   #define true 1

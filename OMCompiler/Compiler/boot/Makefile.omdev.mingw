@@ -16,7 +16,7 @@ CC=gcc
 CXX=g++
 
 ifeq (gcc,$(findstring gcc,$(CC)))
-	override CFLAGS += -fno-ipa-pure-const
+	override CFLAGS += -O0 -g -fno-ipa-pure-const
 endif
 TOP_DIR=../../
 OMHOME=$(OMBUILDDIR)
@@ -43,10 +43,10 @@ CPPFLAGS=-I"$(OMHOME)/include/omc/c" -I../Util/ -DADD_METARECORD_DEFINITIONS=
 CORBALIBS=
 ULIMIT_CMD=true
 SHREXT=.dll
-OMC=$(OMHOME)/bin/omc.exe
+OMC=$(OMHOME)/bin/omc.exe --locale=en
 RPATH=
 #STATIC=static
-BOOTSTRAP_OMC=$(OMBUILDDIR)/bin/omc.exe
+BOOTSTRAP_OMC=$(OMBUILDDIR)/bin/omc.exe --locale=en
 defaultMakefileTarget=Makefile.omdev.mingw
 LIB_OMC=lib/omc
 OMCRUNTIMEAR1=../runtime/libomcruntime-boot.a

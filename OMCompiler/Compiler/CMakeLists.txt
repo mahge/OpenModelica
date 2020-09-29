@@ -146,7 +146,7 @@ add_custom_target(DEPENDENCY_UPDATE
 add_dependencies(DEPENDENCY_SCAN INTERFACE_CHECK)
 add_dependencies(DEPENDENCY_UPDATE DEPENDENCY_SCAN)
 
-add_library(OpenModelicaCompiler STATIC ${OMC_C_SOURCE_FILES} .cmake/omc_entry_point.c)
+add_library(OpenModelicaCompiler SHARED ${OMC_C_SOURCE_FILES} .cmake/omc_entry_point.c)
 target_compile_definitions(OpenModelicaCompiler PRIVATE ADD_METARECORD_DEFINITIONS=)
 
 add_dependencies(OpenModelicaCompiler DEPENDENCY_UPDATE)

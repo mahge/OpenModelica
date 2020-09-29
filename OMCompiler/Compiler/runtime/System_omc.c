@@ -199,9 +199,15 @@ extern const char* System_dirname(const char* str)
   char *cpy = omc_alloc_interface.malloc_strdup(str);
   char *res = NULL;
 #if defined(_MSC_VER)
+  int last = strlen(cpy) - 1;
+  while (last > 0 && (cpy[last] == '\\' || cpy[last] == '/'))
+      last--;
+
+  cpy[last + 1] = '\0';
+
   char drive[_MAX_DRIVE], dir[_MAX_DIR], filename[_MAX_FNAME], extension[_MAX_EXT];
-  _splitpath(str, drive, dir, filename, extension);
-  sprintf(cpy, "%s/%s/",drive,dir);
+  _splitpath(cpy, drive, dir, filename, extension);
+  sprintf(cpy, "%s/%s",drive,dir);
   res = cpy;
 #else
   res = dirname(cpy);
@@ -370,19 +376,27 @@ extern void System_setUsesCardinality(int b)
 
 extern void* System_strtok(const char *str0, const char *delimit)
 {
+#if defined(_MSC_VER)
+#define omcstrtok strtok_s
+#else
+#define omcstrtok strtok_r
+#endif
+
   char *s;
   void *res = mmc_mk_nil();
   char *str = omc_alloc_interface.malloc_strdup(str0);
   char *saveptr;
-  s=strtok_r(str,delimit,&saveptr);
+  s = omcstrtok(str, delimit, &saveptr);
   if (s == NULL) {
     return res;
   }
   res = mmc_mk_cons(mmc_mk_scon(s),res);
-  while ((s=strtok_r(NULL,delimit,&saveptr))) {
+  while ((s= omcstrtok(NULL,delimit,&saveptr))) {
     res = mmc_mk_cons(mmc_mk_scon(s),res);
   }
   return listReverse(res);
+
+#undef omcstrtok
 }
 
 extern char* System_substring(const char *str, int start, int stop)
@@ -672,15 +686,15 @@ extern void* System_regex(const char* str, const char* re, int maxn, int extende
 #if !defined(_MSC_VER)
   void *matches[maxn];
 #else
-  void **matches = omc_alloc_interface.malloc(sizeof(void*)*maxn);
+  void **matches = omc_alloc_interface.malloc(sizeof(void*) * maxn);
 #endif
-  *nmatch = OpenModelica_regexImpl(str,re,maxn,extended,sensitive,mmc_mk_scon,(void**)&matches);
+  *nmatch = OpenModelica_regexImpl(str,re,maxn,extended,sensitive,mmc_mk_scon,(void**)matches);
   res = mmc_mk_nil();
   for (i=maxn-1; i>=0; i--) {
     res = mmc_mk_cons(matches[i],res);
   }
 #if defined(_MSC_VER)
-  GC_free(matches);
+  //GC_free(matches);
 #endif
   return res;
 }
@@ -841,7 +855,8 @@ extern const char* System_realpath(const char *path)
     MMC_THROW();
   }
 
-  WCHAR unicodeFullPath[bufLen];
+  // WCHAR unicodeFullPath[bufLen];
+  WCHAR* unicodeFullPath = (WCHAR*)omc_alloc_interface.malloc(sizeof(WCHAR) * bufLen);
   if (!GetFullPathNameW(unicodePath, bufLen, unicodeFullPath, NULL)) {
     MULTIBYTE_OR_WIDECHAR_VAR_FREE(unicodePath);
     fprintf(stderr, "GetFullPathNameW failed. %lu\n", GetLastError());
@@ -925,15 +940,16 @@ extern void* System_launchParallelTasks(threadData_t *threadData, int numThreads
   int len = listLength(dataLst), i;
   void *result = mmc_mk_nil();
   thread_data data = {0};
+  int isInteger = 0;
+  pthread_attr_t attr = NULL;
+
 #if !defined(_MSC_VER)
   void *commands[len];
   void *status[len];
   pthread_t th[numThreads];
-  int isInteger = 0;
 
 #if defined(__MINGW32__)
   /* adrpo: set thread stack size on Windows to 4MB */
-  pthread_attr_t attr;
   if (pthread_attr_init(&attr))
   {
     const char *tok[1] = {strerror(errno)};
@@ -997,15 +1013,11 @@ extern void* System_launchParallelTasks(threadData_t *threadData, int numThreads
     commands[i] = MMC_CAR(dataLst);
     status[i] = 0; /* just in case */
   }
+
   numThreads = numThreads > len ? len : numThreads;
+  unsigned int live_threads = 0;
   for (i=0; i<numThreads; i++) {
-    if (GC_pthread_create(&th[i],
-#if defined(__MINGW32__)
-    &attr,
-#else
-    NULL,
-#endif
-    System_launchParallelTasksThread,&data)) {
+    if (GC_pthread_create(&th[i], &attr, System_launchParallelTasksThread,&data)) {
       /* GC_pthread_create failed. We need to join already created threads though... */
       const char *tok[1] = {strerror(errno)};
       data.fail = 1;
@@ -1017,9 +1029,10 @@ extern void* System_launchParallelTasks(threadData_t *threadData, int numThreads
         0);
       break;
     }
+    live_threads++;
   }
-  for (i=0; i<numThreads; i++) {
-    if (th[i] && GC_pthread_join(th[i], NULL)) {
+  for (i=0; i < live_threads; i++) {
+    if (GC_pthread_join(th[i], NULL)) {
       const char *tok[1] = {strerror(errno)};
       data.fail = 1;
       c_add_message(NULL,5999,

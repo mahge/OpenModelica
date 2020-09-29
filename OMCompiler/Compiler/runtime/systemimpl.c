@@ -42,6 +42,8 @@ extern "C" {
 #include <libgen.h>
 #include <dirent.h>
 #include <unistd.h>
+#else
+#include "dirent_win.h"
 #endif
 
 #include "meta/meta_modelica.h"
@@ -302,7 +304,7 @@ extern char* SystemImpl__pwd(void)
     return NULL;
   }
 
-  WCHAR unicodePath[bufLen];
+  WCHAR* unicodePath = (WCHAR*)omc_alloc_interface.malloc(bufLen * sizeof(WCHAR));
   if (!GetCurrentDirectoryW(bufLen, unicodePath)) {
     c_add_message(NULL,-1,ErrorType_scripting,ErrorLevel_error,gettext("GetCurrentDirectoryW failed."),NULL,0);
     return NULL;
@@ -312,6 +314,7 @@ extern char* SystemImpl__pwd(void)
   SystemImpl__toWindowsSeperators(buffer, bufferLength);
   char *res = omc_alloc_interface.malloc_strdup(buffer);
   MULTIBYTE_OR_WIDECHAR_VAR_FREE(buffer);
+  GC_free(unicodePath);
   return res;
 #else
   char buf[MAXPATHLEN];
@@ -904,8 +907,13 @@ extern int SystemImpl__directoryExists(const char *str)
   HANDLE sh;
   char* path = strdup(str);
   int last = strlen(path)-1;
+
   /* adrpo: RTFM! the path cannot end in a slash??!! https://msdn.microsoft.com/en-us/library/windows/desktop/aa364418(v=vs.85).aspx */
-  if (last > 0 && (path[last] == '\\' || path[last] == '/')) path[last] = '\0';
+  while (last > 0 && (path[last] == '\\' || path[last] == '/'))
+      last--;
+
+  path[last + 1] = '\0';
+
   sh = FindFirstFile(path, &FileData);
   free(path);
   if (sh == INVALID_HANDLE_VALUE)
@@ -2416,7 +2424,11 @@ const char* SystemImpl__iconv__ascii(const char * str)
 
 static int isUtf8Encoding(const char *str)
 {
-  return strcasecmp(str, "UTF-8") || strcasecmp(str, "UTF8");
+#if defined(_MSC_VER)
+    return _stricmp(str, "UTF-8") || _stricmp(str, "UTF8");
+#else
+    return strcasecmp(str, "UTF-8") || strcasecmp(str, "UTF8");
+#endif
 }
 
 extern const char* SystemImpl__iconv(const char * str, const char *from, const char *to, int printError)
@@ -2883,7 +2895,13 @@ char* SystemImpl__ctime(double time)
 {
   char buf[64] = {0}; /* needs to be >=26 char */
   time_t t = (time_t) time;
-  return omc_alloc_interface.malloc_strdup(ctime_r(&t,buf));
+#if defined(_MSC_VER)
+  errno_t e = ctime_s(buf, 64, t);
+  assert(e == 0 && "ctime_s returned an error");
+  return omc_alloc_interface.malloc_strdup(buf);
+#else
+  return omc_alloc_interface.malloc_strdup(ctime_r(&t, buf));
+#endif
 }
 
 #if defined(__MINGW32__)

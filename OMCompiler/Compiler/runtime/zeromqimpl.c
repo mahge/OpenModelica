@@ -30,7 +30,7 @@
 
 #include <zmq.h>
 #include <stdio.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <string.h>
 
 #include "meta/meta_modelica.h"
@@ -54,7 +54,8 @@ void* ZeroMQ_initialize(const char *zeroMQFileSuffix)
   }
   // get the port number
   const size_t endPointBufSize = 30;
-  char endPointBuf[endPointBufSize];
+  // char endPointBuf[endPointBufSize];
+  char* endPointBuf = (char*)omc_alloc_interface.malloc(sizeof(char) * endPointBufSize);
   zmq_getsockopt(zmqSocket, ZMQ_LAST_ENDPOINT, &endPointBuf, (size_t *)&endPointBufSize);
   // create the file path
   const char* tempPath = SettingsImpl__getTempDirectoryPath();

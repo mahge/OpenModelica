@@ -50,8 +50,8 @@ extern "C" {
 #include <setjmp.h>
 
 #if defined(_MSC_VER)
-#include "omc_inline.h"
-#include "util/omc_msvc.h"
+#include "../omc_inline.h"
+#include "../util/omc_msvc.h"
 #endif
 
 typedef struct {
