@@ -27,10 +27,6 @@ jobs:
         run: |
           cd OMCompiler
           mkdir build_cmake && cd build_cmake
-          
-      - name: Configure
-        run: |
-          pwd
           cmake .. -Wno-dev
         
 
