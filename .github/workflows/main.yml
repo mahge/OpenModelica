@@ -30,6 +30,7 @@ jobs:
           cd OMCompiler
           mkdir build_cmake && cd build_cmake
           cmake .. -Wno-dev
+          make -j omc
         
 
       # Runs a set of commands using the runners shell
