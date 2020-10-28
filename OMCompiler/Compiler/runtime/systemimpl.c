@@ -32,6 +32,7 @@
 extern "C" {
 #endif
 
+#include "omc_portability.h"
 #include "systemimpl.h"
 #include "is_utf8.h"
 
@@ -2870,17 +2871,15 @@ int SystemImpl__fileContentsEqual(const char *file1, const char *file2)
 
 int SystemImpl__rename(const char *source, const char *dest)
 {
-#if defined(__MINGW32__) || defined(_MSC_VER)
-  return MoveFileEx(source, dest, MOVEFILE_REPLACE_EXISTING);
-#endif
-  return 0==rename(source,dest);
+  omc_file_rename(source, dest);
 }
 
 char* SystemImpl__ctime(double time)
 {
   char buf[64] = {0}; /* needs to be >=26 char */
   time_t t = (time_t) time;
-  return omc_alloc_interface.malloc_strdup(ctime_r(&t,buf));
+  omc_time_ctime(buf, sizeof(buf), &t);
+  return omc_alloc_interface.malloc_strdup(buf);
 }
 
 #if defined(__MINGW32__)

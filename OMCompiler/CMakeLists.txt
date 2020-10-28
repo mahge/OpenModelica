@@ -43,7 +43,7 @@ write_compiler_detection_header(
   FILE omc_compiler_detection.h
   PREFIX OMC
   COMPILERS GNU Clang MSVC
-  FEATURES cxx_static_assert
+  FEATURES cxx_static_assert c_restrict
 )
 
 
