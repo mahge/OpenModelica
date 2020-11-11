@@ -21,10 +21,11 @@ jobs:
           cd OMCompiler
           mkdir build_cmake && cd build_cmake
           cmake .. -Wno-dev
-          make -j omc
+          make -j2 install_omc
         
 
-      - name: Versions
-        run: |
-          cmake --version
-          clang --version
+      - name: Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: install
+          path: OMCompiler/build_cmake/install_cmake
