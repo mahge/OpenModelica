@@ -53,6 +53,7 @@ target_link_libraries(omcruntime PUBLIC omc::3rd::lpsolve55)
 target_link_libraries(omcruntime PUBLIC omc::3rd::libzmq)
 target_link_libraries(omcruntime PUBLIC omc::3rd::FMIL::minizip) # We use the minizip lib from 3rdParty/FMIL
 
+target_include_directories(omcruntime PUBLIC ${Intl_INCLUDE_DIRS})
 target_include_directories(omcruntime PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(omcruntime PRIVATE ${OMCompiler_SOURCE_DIR}) # for revision.h
 
@@ -146,6 +147,7 @@ target_link_libraries(omcbackendruntime PUBLIC omc::simrt::runtime)
 target_link_libraries(omcbackendruntime PUBLIC omc::3rd::fmilib::static)
 target_link_libraries(omcbackendruntime PUBLIC omc::3rd::metis)
 
+target_include_directories(omcbackendruntime PUBLIC ${Intl_INCLUDE_DIRS})
 target_include_directories(omcbackendruntime PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(omcbackendruntime PRIVATE ${OMCompiler_SOURCE_DIR}) # for revision.h
 
