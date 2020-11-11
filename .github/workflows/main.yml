@@ -20,8 +20,8 @@ jobs:
         run: |
           cd OMCompiler
           mkdir build_cmake && cd build_cmake
-          cmake .. -Wno-dev
-          make -j2 install_omc
+          cmake .. -Wno-dev -DCMAKE_BUILD_TYPE=Release
+          make -j2 install
         
 
       - name: Artifact
