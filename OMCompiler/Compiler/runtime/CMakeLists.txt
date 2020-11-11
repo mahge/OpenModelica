@@ -8,7 +8,7 @@ find_package(LAPACK REQUIRED)
 # systems we need to link explicitly to uuid. However, there is no FindUUID yet. We can add one later. Instead we use
 # find library for now. It should be okay for now since I am guessing uuid headers should be in the default include dirs
 # anyway.
-if(NOT WIN32)
+if(LINUX)
   find_library(UUID_LIB NAMES uuid REQUIRED)
 endif()
 

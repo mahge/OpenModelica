@@ -1,0 +1,30 @@
+
+name: CI
+
+on:
+  push:
+    branches: [ macos_build ]
+  pull_request:
+    branches: [ macos_build ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true 
+
+      - name: Configure
+        run: |
+          cd OMCompiler
+          mkdir build_cmake && cd build_cmake
+          cmake .. -Wno-dev
+          make -j omc
+        
+
+      - name: Versions
+        run: |
+          cmake --version
+          clang --version
