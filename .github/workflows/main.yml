@@ -21,7 +21,7 @@ jobs:
           cd OMCompiler
           mkdir build_cmake && cd build_cmake
           cmake .. -Wno-dev -DCMAKE_BUILD_TYPE=Release
-          make -j2 install
+          make -j4 install
         
 
       - name: Artifact
