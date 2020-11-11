@@ -116,6 +116,7 @@ target_link_libraries(omcruntime-boot PUBLIC omc::3rd::lpsolve55)
 target_link_libraries(omcruntime-boot PUBLIC omc::3rd::libzmq)
 target_link_libraries(omcruntime-boot PUBLIC omc::3rd::FMIL::minizip) # We use the minizip lib from 3rdParty/FMIL
 
+target_include_directories(omcruntime-boot PUBLIC ${Intl_INCLUDE_DIRS})
 target_include_directories(omcruntime-boot PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(omcruntime-boot PRIVATE ${OMCompiler_SOURCE_DIR}) # for revision.h
 
