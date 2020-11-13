@@ -1,5 +1,4 @@
 
-#include "omc_compiler_detection.h"
 #include "omcompiler_config.h"
 
 #if defined(__MINGW32__) || OMC_COMPILER_IS_MSVC

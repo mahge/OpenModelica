@@ -1,0 +1,27 @@
+#ifndef OMCOMPILER_CONFIG_H
+#define OMCOMPILER_CONFIG_H
+
+#include "omc_compiler_detection.h"
+
+/* Defined to 1 if we have the <unistd.h> header file. */
+#cmakedefine HAVE_UNISTD_H 1
+
+/* Defined to 1 if we have the <time.h> header file. */
+#cmakedefine HAVE_TIME_H 1
+
+/* Define to 1 if we have the <ctype.h> header file. */
+#cmakedefine HAVE_CTYPE_H 1
+
+
+
+
+
+
+
+/* Defined to 1 if we have the ctime_s function. */
+#cmakedefine HAVE_CTIME_S 1
+
+/* Defined to 1 if we have the ctime_r function. */
+#cmakedefine HAVE_CTIME_R 1
+
+#endif

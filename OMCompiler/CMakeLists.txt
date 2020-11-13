@@ -71,8 +71,6 @@ if(OMC_USE_CCACHE AND CCACHE_PROGRAM)
 endif()
 
 
-
-
 omc_add_subdirectory(3rdParty)
 
 # We do this after 3rdParty is added because some libs in FMILib use implicit function declaration
@@ -84,9 +82,15 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GN
     add_compile_options($<$<COMPILE_LANGUAGE:C>:-Werror=implicit-function-declaration>)
 endif()
 
+omc_add_subdirectory(config)
+
+
 omc_add_subdirectory(SimulationRuntime)
 omc_add_subdirectory(Parser)
 omc_add_subdirectory(Compiler)
+
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config/omcompiler_config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config/omcompiler_config.h)
 
 
 message(STATUS "--------------------------------------------------------------------------")

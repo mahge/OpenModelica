@@ -62,6 +62,8 @@ target_link_libraries(omcruntime PUBLIC CURL::libcurl)
 target_link_libraries(omcruntime PUBLIC ${Intl_LIBRARIES})
 target_link_libraries(omcruntime PUBLIC Iconv::Iconv)
 target_link_libraries(omcruntime PUBLIC ${LAPACK_LIBRARIES})
+
+target_link_libraries(omcruntime PUBLIC omc::config::portability)
 target_link_libraries(omcruntime PUBLIC omc::simrt::runtime)
 target_link_libraries(omcruntime PUBLIC omc::3rd::lpsolve55)
 target_link_libraries(omcruntime PUBLIC omc::3rd::libzmq)
