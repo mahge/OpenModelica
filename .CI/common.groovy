@@ -291,7 +291,9 @@ void buildOMC_CMake(cmake_args) {
      echo set -ex
      echo mkdir OMCompiler/build_cmake
      echo cmake -S OMCompiler -B OMCompiler/build_cmake ${cmake_args}
-     echo time cmake --build OMCompiler/build_cmake --parallel \${MAKETHREADS}
+     echo time cmake --build OMCompiler/build_cmake --parallel \${MAKETHREADS} --target install
+     echo OMCompiler/build_cmake/install_cmake/bin/omc --help
+     echo OMCompiler/build_cmake/install_cmake/bin/omc --version
      ) > buildOMCWindows.sh
 
      set MSYSTEM=MINGW64
@@ -302,7 +304,9 @@ void buildOMC_CMake(cmake_args) {
   else {
     sh "mkdir OMCompiler/build_cmake"
     sh "cmake -S OMCompiler -B OMCompiler/build_cmake ${cmake_args}"
-    sh "cmake --build OMCompiler/build_cmake --parallel ${numPhysicalCPU()}"
+    sh "cmake --build OMCompiler/build_cmake --parallel ${numPhysicalCPU()} --target install"
+    sh "OMCompiler/build_cmake/install_cmake/bin/omc --help"
+    sh "OMCompiler/build_cmake/install_cmake/bin/omc --version"
   }
 }
 
