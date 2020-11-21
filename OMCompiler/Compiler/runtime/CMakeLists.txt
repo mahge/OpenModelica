@@ -287,5 +287,5 @@ else()
   set(CONFIG_OS ${OMC_TARGET_SYSTEM_NAME})
   set(MAKE ${CMAKE_MAKE_PROGRAM})
  
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../Util/Autoconf.mo.in ${CMAKE_CURRENT_SOURCE_DIR}/../Util/Autoconf.mo)
+  # configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../Util/Autoconf.mo.in ${CMAKE_CURRENT_SOURCE_DIR}/../Util/Autoconf.mo)
 endif()
