@@ -210,7 +210,7 @@ else()
   set(MODELICA_SPEC_PLATFORM "${OMC_TARGET_SYSTEM_NAME}32")
 endif()
 
-set(host_short ${CMAKE_SYSTEM_PROCESSOR}-${OMC_TARGET_SYSTEM_NAME})
+set(host_short "${CMAKE_SYSTEM_PROCESSOR}-${OMC_TARGET_SYSTEM_NAME}-gnu")
 
 set(RUNTIMECC ${CMAKE_C_COMPILER})
 set(CC ${CMAKE_C_COMPILER})
@@ -251,6 +251,10 @@ set(WITH_UMFPACK "#define WITH_UMFPACK")
 set(WITH_HWLOC 0)
 set(WITH_UUID "#define WITH_LIBUUID 1")
 
+set(RUNTIMECFLAGS "-fPIC -falign-functions -mfpmath=sse -fno-dollars-in-identifiers")
+
+# set(prefix1 "${CMAKE_CURRENT_SOURCE_DIR}/../../build/")
+get_filename_component(prefix "${CMAKE_CURRENT_SOURCE_DIR}/../../build/" ABSOLUTE)
 
 set(USE_GRAPH 0)
 
