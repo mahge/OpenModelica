@@ -186,7 +186,7 @@ add_dependencies(DEPENDENCY_UPDATE DEPENDENCY_SCAN)
 
 
 
-add_library(OpenModelicaCompiler STATIC ${OMC_C_SOURCE_FILES} .cmake/omc_entry_point.c)
+add_library(OpenModelicaCompiler SHARED ${OMC_C_SOURCE_FILES} .cmake/omc_entry_point.c)
 
 target_compile_definitions(OpenModelicaCompiler PRIVATE ADD_METARECORD_DEFINITIONS=)
 
@@ -214,6 +214,7 @@ target_link_libraries(OpenModelicaCompiler PUBLIC omc::compiler::graphstream)
 target_link_libraries(OpenModelicaCompiler PUBLIC omc::simrt::runtime)
 target_link_libraries(OpenModelicaCompiler PUBLIC omc::3rd::modelica_external_c)
 target_link_libraries(OpenModelicaCompiler PUBLIC omc::3rd::modelica_io)
+target_link_libraries(OpenModelicaCompiler PUBLIC m)
 
 
 
@@ -231,7 +232,8 @@ target_link_libraries(omc PRIVATE OpenModelicaCompiler)
 # Install omc to the directory for RUNTIME (default=bin)
 # They are part of "compiler" installation component. This means that you can
 # install just the files in this component by specifying its name.
-install(TARGETS omc OpenModelicaCompiler
+install(TARGETS omc OpenModelicaCompiler OpenModelicaRuntimeC omcgc omparse omcruntime omcbackendruntime
+                omcgraphstream ModelicaExternalC ModelicaMatIO ModelicaIO omantlr3 netstream libzmq
             COMPONENT compiler)
 
 # Install the *ModelicaBuiltin files to <library_dir>/omc/ that is where omc.exe expects them to be.

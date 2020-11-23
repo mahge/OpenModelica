@@ -26,7 +26,7 @@ set(OM_PARSE_SOURCES ${OM_PARSE_SOURCES} ${GNERATED_DIRECTORY}/ModelicaParser.c)
 
 # ######################################################################################################################
 # Library: omparse
-add_library(omparse STATIC)
+add_library(omparse SHARED)
 add_library(omc::parser ALIAS omparse)
 
 target_sources(omparse PRIVATE ${OM_PARSE_SOURCES})

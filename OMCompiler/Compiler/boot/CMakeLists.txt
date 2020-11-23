@@ -34,7 +34,7 @@ target_link_libraries(bomc PRIVATE omc::compiler::runtime)
 target_link_libraries(bomc PRIVATE omc::compiler::graphstream)
 target_link_libraries(bomc PRIVATE omc::3rd::modelica_external_c)
 target_link_libraries(bomc PRIVATE omc::3rd::modelica_io)
-
+target_link_libraries(bomc PUBLIC m)
 
 
 

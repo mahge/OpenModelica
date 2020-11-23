@@ -63,7 +63,7 @@ set(OMC_RUNTIIME_SOURCES
 
 # ######################################################################################################################
 # Library: omcruntime
-add_library(omcruntime STATIC)
+add_library(omcruntime SHARED)
 add_library(omc::compiler::runtime ALIAS omcruntime)
 
 target_sources(omcruntime PRIVATE ${OMC_RUNTIIME_SOURCES})
@@ -75,6 +75,7 @@ target_link_libraries(omcruntime PUBLIC Iconv::Iconv)
 target_link_libraries(omcruntime PUBLIC omc::simrt::runtime)
 target_link_libraries(omcruntime PUBLIC omc::3rd::libzmq)
 target_link_libraries(omcruntime PUBLIC omc::3rd::FMIL::minizip) # We use the minizip lib from 3rdParty/FMIL
+target_link_libraries(omcruntime PUBLIC ${CMAKE_DL_LIBS})
 
 if(OMC_USE_LPSOLVE)
   target_link_libraries(omcruntime PUBLIC omc::3rd::lpsolve55)
@@ -129,7 +130,7 @@ endif(OMC_USE_CORBA)
 
 # ######################################################################################################################
 # Library: omcbackendruntime
-add_library(omcbackendruntime STATIC)
+add_library(omcbackendruntime SHARED)
 add_library(omc::compiler::backendruntime ALIAS omcbackendruntime)
 
 set(OMC_BACKENDRUNTIIME_SOURCES
@@ -155,7 +156,7 @@ target_include_directories(omcbackendruntime PRIVATE ${OMCompiler_SOURCE_DIR}) #
 
 # ######################################################################################################################
 # Library: omcgraphstream
-add_library(omcgraphstream STATIC)
+add_library(omcgraphstream SHARED)
 add_library(omc::compiler::graphstream ALIAS omcgraphstream)
 
 set(OMC_GRAPH_STREAM_SOURCES GraphStreamExt_omc.cpp)

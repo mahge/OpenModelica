@@ -16,7 +16,7 @@ file(GLOB OMC_SIMRT_FMI_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/fmi/*.h)
 
 # ######################################################################################################################
 # Library: OpenModelicaRuntimeC
-add_library(OpenModelicaRuntimeC STATIC)
+add_library(OpenModelicaRuntimeC SHARED)
 add_library(omc::simrt::runtime ALIAS OpenModelicaRuntimeC)
 
 target_sources(OpenModelicaRuntimeC PRIVATE ${OMC_SIMRT_UTIL_SOURCES} ${OMC_SIMRT_META_SOURCES} ${OMC_SIMRT_GC_SOURCES})
