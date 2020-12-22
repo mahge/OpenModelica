@@ -5,7 +5,7 @@
 ## Dependencies (Linux/OSX) 
 
 Many software packages are included inside the repositories.
-To get everything running, you will need a few extras:
+To get everything running, you will need a few extras
 
 - C++11 compiler
 - autoconf, automake, libtool, g++, gfortran (pretty standard compilers)
