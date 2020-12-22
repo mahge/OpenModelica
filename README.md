@@ -94,7 +94,7 @@ See [CONTRIBUTING.md](https://github.com/OpenModelica/OpenModelica/blob/master/C
 > git submodule update --init --recursive libraries
 ```
 
-## OpenModelica User's Guide
+## OpenModelica User Guide
 
 The [User's Guide](https://openmodelica.org/doc/OpenModelicaUsersGuide/latest/)
 is automatically generated from the documentation repository.
