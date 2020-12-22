@@ -7,7 +7,7 @@
 Many software packages are included inside the repositories.
 To get everything running, you will need a few extras:
 
-- C++11 compiler (if you want a GUI)
+- C++11 compiler
 - autoconf, automake, libtool, g++, gfortran (pretty standard compilers)
 - boost (used by omsimulator and cppruntime, configure --with-cppruntime)
 - [clang](http://clang.llvm.org/), clang++ (optional, but *highly recommended*)
